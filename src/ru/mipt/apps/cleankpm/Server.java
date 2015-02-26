@@ -57,6 +57,7 @@ public class Server {
             try {
                 is.read(buf);
                 command = BufWrapper.convertToInt(buf);
+                System.out.println("command number "+command);
                 UserInitials userInitials;
                 switch(command) {
 
@@ -107,11 +108,17 @@ public class Server {
                         break;
                     }
                     case Config.ADD_EVENT: {
+                        System.out.println("I AM HEEEEEEERE");
                         Event event = (Event) (is.readObject());
+                        if (event==null){
+                            System.out.println("I AM NULLLLLLLLLLLLLLL");
+                        }
+                        System.out.println("I AM HEEEEEEER E");
                         lock.lock();
                         Database database = Database.getInstance();
                         if ((database.findEventByName(event.getEventName()))==null){
                             database.addEvent(event);
+                            System.out.println("I AM HEEEEEEER eeeeeeE");
                             buf = BufWrapper.convertToBuf(Config.OK);
                         }else{
                             System.out.println("such name already exists");
