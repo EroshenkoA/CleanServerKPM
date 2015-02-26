@@ -14,4 +14,7 @@ public class Config {
     public final static int WRONG_PASSWORD = 4;
     public final static int DOESNOT_EXIST = 5;
     public final static int SIGNED_IN = 6;
+    public final static int ADD_EVENT = 7;
+    public final static int UPDATE_USER = 8;
+    public final static int OK = 9;
 }

@@ -1,5 +1,6 @@
 package ru.mipt.apps.cleankpm;
 
+import ru.mipt.apps.cleankpm.tabObjects.Event;
 import ru.mipt.apps.cleankpm.userObjects.User;
 import ru.mipt.apps.cleankpm.userObjects.UserInitials;
 
@@ -14,6 +15,7 @@ public class Database implements Serializable { //singleton class
     public final static String databasePath = Database.class.getClassLoader().getResource("//").getPath()+"ru\\mipt\\apps\\cleankpm\\resourses\\" + "serialized.out";
     private static boolean wasInitialized = false;
     private ArrayList<User> usersList;
+    private ArrayList<Event> eventsList;
     private static volatile Database instance;
     public static Database getInstance(){
         if (instance==null){
@@ -30,6 +32,23 @@ public class Database implements Serializable { //singleton class
         }
         return null;
     }
+    public Event findEventByName(String name) {
+        int lastIndex = eventsList.size()-1;
+        for (int i=0; i<=lastIndex; i++){
+            if (name.compareTo( (eventsList.get(i)).getEventName())==0){//case equal
+                return eventsList.get(i);
+            }
+        }
+        return null;
+    }
+    public void addEvent(Event event){
+        eventsList.add(event);
+        try {
+            save();
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+    }
     public void addUser(UserInitials userInitials){
         usersList.add(new User(userInitials));
         try {
@@ -43,6 +62,7 @@ public class Database implements Serializable { //singleton class
         wasInitialized = true;
         //eventsList = new ArrayList<>();
         usersList = new ArrayList<User>();
+        eventsList = new ArrayList<Event>();
         try {
             save();
         } catch (IOException e){

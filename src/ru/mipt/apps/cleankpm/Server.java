@@ -2,6 +2,7 @@ package ru.mipt.apps.cleankpm;
 
 import ru.mipt.apps.cleankpm.constants.Config;
 import ru.mipt.apps.cleankpm.statics.BufWrapper;
+import ru.mipt.apps.cleankpm.tabObjects.Event;
 import ru.mipt.apps.cleankpm.userObjects.User;
 import ru.mipt.apps.cleankpm.userObjects.UserInitials;
 
@@ -105,6 +106,26 @@ public class Server {
                         endStreams();
                         break;
                     }
+                    case Config.ADD_EVENT: {
+                        Event event = (Event) (is.readObject());
+                        lock.lock();
+                        Database database = Database.getInstance();
+                        if ((database.findEventByName(event.getEventName()))==null){
+                            database.addEvent(event);
+                            buf = BufWrapper.convertToBuf(Config.OK);
+                        }else{
+                            System.out.println("such name already exists");
+                            buf = BufWrapper.convertToBuf(Config.NAME_EXISTS);
+                        }
+                        lock.unlock();
+                        os.write(buf);
+                        endStreams();
+                        break;
+                    }
+                    case Config.UPDATE_USER:{
+                        break;
+                    }
+
                 }
             } catch (Throwable t) {
                 t.printStackTrace();
